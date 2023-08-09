@@ -2,7 +2,8 @@ import pandas as pd
 
 def read_data() -> pd.DataFrame:
     '''
-    Reads the raw input CSV File and returns a cleaned version of the file.
+    Reads the raw input CSV File and returns a cleaned and trimmed-down
+    version of the file.
     '''
     df = pd.read_csv('data/Raw_Input.csv', encoding='ISO-8859-1')
 
@@ -20,11 +21,6 @@ def read_data() -> pd.DataFrame:
     # Replace Date attribute with Year attribute
     df_cleaned['Year'] = (df_cleaned['Date'].dt.year)
     df_cleaned = df_cleaned.drop('Date', axis=1)
-
-    print(df_cleaned['Price'].mean())
-
-    with open('data/Cleaned_Input.csv','w') as f:
-        f.write(df_cleaned.to_csv())
 
     return df_cleaned
 
