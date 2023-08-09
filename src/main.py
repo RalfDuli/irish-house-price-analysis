@@ -28,11 +28,15 @@ def read_data() -> pd.DataFrame:
 
     return df_cleaned
 
-def csv_to_json(df: pd.DataFrame):
+def csv_to_json(df: pd.DataFrame) -> str:
+    '''
+    Takes in a Pandas Dataframe and outputs a JSON String representing
+    the data as the means of the prices for every possible combinations
+    of the year and county.
+    '''
     grouped_df = df.groupby(['Year','County'])
     mean_prices_by_county = grouped_df.mean()
     json_data = mean_prices_by_county.reset_index().to_json(orient='records')
-    print(mean_prices_by_county)
     return json_data
 
 def main():
