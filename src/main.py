@@ -1,11 +1,11 @@
 import pandas as pd
 
-def read_data() -> pd.DataFrame:
+def read_data(csv_filepath: str) -> pd.DataFrame:
     '''
     Reads the raw input CSV File and returns a cleaned and trimmed-down
     version of the file.
     '''
-    df = pd.read_csv('data/Raw_Input.csv', encoding='ISO-8859-1')
+    df = pd.read_csv(csv_filepath, encoding='ISO-8859-1')
 
     # Dropping irrelevant columns and rows with NaN values
     columns_to_drop = ['Full_Market_Price',
@@ -36,8 +36,9 @@ def csv_to_json(df: pd.DataFrame) -> str:
     return json_data
 
 def main():
+    csv_filepath = 'data/Raw_Input.csv'
     json_filepath = 'data/mean_housing_prices_by_county.json'
-    df = read_data()
+    df = read_data(csv_filepath)
     with open(json_filepath, 'w') as f:
        f.write(csv_to_json(df))
 
