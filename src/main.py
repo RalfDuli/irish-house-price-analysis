@@ -1,7 +1,16 @@
 import pandas as pd
 import json
 
-def read_data(csv_filepath: str) -> pd.DataFrame:
+def format_data(csv_filepath: str, json_filepath: str):
+    '''
+    Formats the raw input CSV data into a JSON string, and
+    writes the result into a file.
+    '''
+    df = clean_data(csv_filepath)
+    with open(json_filepath, 'w') as f:
+       f.write(csv_to_json(df))
+
+def clean_data(csv_filepath: str) -> pd.DataFrame:
     '''
     Reads the raw input CSV File and returns a cleaned and trimmed-down
     version of the file.
@@ -45,9 +54,7 @@ def csv_to_json(df: pd.DataFrame) -> str:
 def main():
     csv_filepath = 'data/Raw_Input.csv'
     json_filepath = 'data/mean_housing_prices_by_county.json'
-    df = read_data(csv_filepath)
-    with open(json_filepath, 'w') as f:
-       f.write(csv_to_json(df))
+    format_data(csv_filepath, json_filepath)
 
 if __name__ == '__main__':
     main()
