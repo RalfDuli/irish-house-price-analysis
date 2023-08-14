@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 def read_data(csv_filepath: str) -> pd.DataFrame:
     '''
@@ -32,8 +33,14 @@ def csv_to_json(df: pd.DataFrame) -> str:
     '''
     grouped_df = df.groupby(['Year','County'])
     mean_prices_by_county = grouped_df.mean()
-    json_data = mean_prices_by_county.reset_index().to_json(orient='records')
-    return json_data
+
+    # Ordering the data in a 2-layered Python dictionary, then converting the dictionary to
+    # a JSON string
+    dict_data = mean_prices_by_county.reset_index().groupby('Year').apply(
+        lambda x: x.set_index('County').to_dict(orient='index')
+        ).to_dict()
+    json_str = str(json.dumps(dict_data))
+    return json_str
 
 def main():
     csv_filepath = 'data/Raw_Input.csv'
