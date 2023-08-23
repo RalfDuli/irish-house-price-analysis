@@ -34,7 +34,7 @@ class County:
     
 def init_counties(county_list: list):
     '''
-    Initialises a list of counties with all of the relevant
+    Initialises the list of counties with all relevant
     county objects.
     '''
     with open('data/mean_housing_prices_by_county.json', 'r') as f:
