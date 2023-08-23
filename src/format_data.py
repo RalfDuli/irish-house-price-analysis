@@ -42,6 +42,10 @@ def csv_to_json(df: pd.DataFrame) -> str:
     '''
     grouped_df = df.groupby(['Year','County'])
     mean_prices_by_county = grouped_df.mean()
+    
+    mean_prices_by_county = mean_prices_by_county.applymap(
+        lambda x: str('%.2f' % x)
+    )
 
     # Ordering the data in a 2-layered Python dictionary, then converting the dictionary to
     # a JSON string

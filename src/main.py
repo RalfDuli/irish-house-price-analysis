@@ -9,7 +9,7 @@ def main():
     counties = []
     init_counties(counties)
     update_counties(counties,'2015')
-    print([c.get_name() for c in counties])
+    print([(c.get_name(), c.get_avg_price()) for c in counties])
 
 if __name__ == '__main__':
     main()
