@@ -1,6 +1,8 @@
 import pandas as pd
 import json
 
+from county import *
+
 def format_data(csv_filepath: str, json_filepath: str):
     '''
     Formats the raw input CSV data into a JSON string, and
@@ -55,6 +57,11 @@ def main():
     csv_filepath = 'data/Raw_Input.csv'
     json_filepath = 'data/mean_housing_prices_by_county.json'
     format_data(csv_filepath, json_filepath)
+
+    counties = []
+    init_counties(counties)
+    update_counties(counties,'2015')
+    print([c.get_name() for c in counties])
 
 if __name__ == '__main__':
     main()
