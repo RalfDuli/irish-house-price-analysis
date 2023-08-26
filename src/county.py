@@ -32,6 +32,15 @@ class County:
     def get_avg_price(self) -> str:
         return self.__house_price_avg
     
+def get_county_by_name(county_list: list, name: str):
+    '''
+    Searches for a County object in a list of counties by name.
+    '''
+    for c in county_list:
+        if c.get_name() == name:
+            return c
+    return None
+
 def init_counties(county_list: list):
     '''
     Initialises the list of counties with all relevant
