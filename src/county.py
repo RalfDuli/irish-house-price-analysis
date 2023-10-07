@@ -1,15 +1,15 @@
-import json
+import pandas as pd
+import numpy as np
 
 class County:
     '''
     Class representing a county in the Republic of Ireland. Contains information
-    about the average housing price on a given year.
+    about the average housing price over a span of several years.
     '''
     def __init__(self, name) -> None:
         self.__name = name
         self.__year = None
-        self.__house_price_avg = None
-        self.__location_in_json = None
+        self.__avg_price_list = None
 
     def get_year(self):
         return self.__year
@@ -20,17 +20,15 @@ class County:
         Updates the county's relevant attributes.
         '''
         self.__year = new_year
-        json_filepath = 'data/mean_housing_prices_by_county.json'
-        with open(json_filepath, 'r') as f:
-            json_data = json.load(f)
-            self.__location_in_json = json_data[str(self.__year)][self.__name]
-            self.__house_price_avg = self.__location_in_json['Price']
+        csv_filepath = 'data/cleaned_csv.csv'
+        df = pd.read_csv(csv_filepath)
+        self.__avg_price_list = df[self.__name].tolist()
 
     def get_name(self) -> str:
         return self.__name
 
-    def get_avg_price(self) -> str:
-        return self.__house_price_avg
+    def get_avg_prices(self) -> str:
+        return self.__avg_price_list
     
 def get_county_by_name(county_list: list, name: str):
     '''
@@ -46,11 +44,11 @@ def init_counties(county_list: list):
     Initialises the list of counties with all relevant
     county objects.
     '''
-    with open('data/mean_housing_prices_by_county.json', 'r') as f:
-        json_data = json.load(f)
-        counties = dict(json_data)['2010'].keys()
-        for c in counties:
-            county_list.append(County(c))
+    csv_filepath = 'data/cleaned_csv.csv'
+    df = pd.read_csv(csv_filepath)
+    county_names = df.columns.tolist()[1:]
+    for c in county_names:
+        county_list.append(County(c))
 
 def update_counties(county_list: list, year: str):
     '''

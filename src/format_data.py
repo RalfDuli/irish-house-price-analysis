@@ -3,12 +3,12 @@ import json
 
 def format_data(csv_filepath: str, json_filepath: str):
     '''
-    Formats the raw input CSV data into a JSON string, and
-    writes the result into a file.
+    Formats the raw input CSV data into a new CSV file,
+    containing the average house prices for each county
+    for each year represented by this program.
     '''
     df = clean_data(csv_filepath)
-    with open(json_filepath, 'w') as f:
-       f.write(csv_to_json(df))
+    create_new_csv(df)
 
 def clean_data(csv_filepath: str) -> pd.DataFrame:
     '''
@@ -34,23 +34,21 @@ def clean_data(csv_filepath: str) -> pd.DataFrame:
 
     return df_cleaned
 
-def csv_to_json(df: pd.DataFrame) -> str:
+def create_new_csv(df: pd.DataFrame):
     '''
-    Takes in a Pandas Dataframe and outputs a JSON String representing
-    the data as the means of the prices for every possible combinations
-    of the year and county.
+    Takes in a Pandas cleaned Dataframe and outputs a CSV
+    containing the average house prices for each county
+    for each year represented by this program.
     '''
+    #print(df)
     grouped_df = df.groupby(['Year','County'])
     mean_prices_by_county = grouped_df.mean()
     
+    # Formatting the mean values to two decimal places
     mean_prices_by_county = mean_prices_by_county.applymap(
         lambda x: str('%.2f' % x)
     )
 
-    # Ordering the data in a 2-layered Python dictionary, then converting the dictionary to
-    # a JSON string
-    dict_data = mean_prices_by_county.reset_index().groupby('Year').apply(
-        lambda x: x.set_index('County').to_dict(orient='index')
-        ).to_dict()
-    json_str = str(json.dumps(dict_data))
-    return json_str
+    mean_prices_by_county.reset_index(inplace=True)
+    new_df = mean_prices_by_county.pivot(index='Year', columns='County', values='Price')
+    new_df.to_csv('data/cleaned_csv.csv')
